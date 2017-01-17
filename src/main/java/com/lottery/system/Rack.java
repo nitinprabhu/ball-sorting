@@ -1,33 +1,23 @@
 package com.lottery.system;
 
-public class Rack {
+/**
+ * @author nitinprabhu
+ */
+import com.lottery.number.sorting.impl.Sorter;
 
-	
-	public static int[] getNumbersDrawn(int inputArray[]) {
-		
-	if(inputArray.length <=1)
+public class Rack
+{
+
+	public int[] getBalls(int inputArray[])
 	{
-			return inputArray;
-	}
-	else
-	{
-		 for (int i = 0; i < inputArray.length; i++) {
-		        for (int j = 1; j < (inputArray.length - i); j++) {
 
-		            if (inputArray[j - 1] > inputArray[j]) {
-		                int temp = inputArray[j - 1];
-		                inputArray[j - 1] = inputArray[j];
-		                inputArray[j] = temp;
-		            }
+		if (inputArray.length > 1)
+		{
+			Sorter.sortElements(inputArray);
+		}
 
-		        }
-		    }
-		
-	}
-	
-	return inputArray;
-		
-		
+		return inputArray;
+
 	}
 
 }
