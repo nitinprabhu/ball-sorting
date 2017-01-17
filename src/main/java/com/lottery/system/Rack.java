@@ -5,7 +5,7 @@ public class Rack {
 	
 	public static int[] getNumbersDrawn(int inputArray[]) {
 		
-		if(inputArray.length <=1){
+	if(inputArray.length <=1){
 			return inputArray;
 		}
 		else

@@ -22,6 +22,7 @@ public class WinningNumberSortTest {
 	@Test
 	public void test_sorting_when_two_winning_number_are_generated()
 	{
+		
 		Assert.assertArrayEquals(new int[]{20,30}, Rack.getNumbersDrawn(new int[]{30,20}));
 	}
 }
