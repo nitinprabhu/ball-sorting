@@ -16,7 +16,8 @@
 * This project does not use any standard Java API to perform sorting and uses buble sort to perform sorting.
 
 # Project build instructions
+* Import the project into Eclipse by selecting option "Importing Existing Maven project into workspace".
 * Ensure prerequisites are fulfilled as mentioned above.
 * Checkout the project using git repository URL [https://github.com/nitinprabhu/lotterysystem.git](https://github.com/nitinprabhu/lotterysystem.git)
-* Execute command `mvn clean install` from command line.
-* This command will download all dependencies from Maven Repository and you should be able to execute the test case.
+* Execute command `mvn clean install` from command line by navigating to project folder.
+* This command will download all dependencies from Maven Repository and you should be able to execute the test cases from eclipse or command line.
