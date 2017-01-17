@@ -43,14 +43,7 @@ public class RackSortTest
 	public void test_sorting_when_seven_winning_number_are_generated()
 	{
 		Rack rack = new Rack();
-		Assert.assertArrayEquals(new int[] {
-										1,
-										5,
-										15,
-										29,
-										41,
-										57,
-										59}, rack.getBalls(new int[] { 57, 5, 1, 59, 41, 15, 29}));
+		Assert.assertArrayEquals(new int[] {1,5,15,29,41,57,59}, rack.getBalls(new int[] { 57, 5, 1, 59, 41, 15, 29}));
 	}
 
 }
