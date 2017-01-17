@@ -10,7 +10,6 @@ public class Rack
 
 	public int[] getBalls(int inputArray[])
 	{
-
 		if (inputArray.length > 1)
 		{
 			Sorter.sortElements(inputArray);
