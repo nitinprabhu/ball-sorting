@@ -52,41 +52,38 @@ pipelines:
                    command: cache
                    arguments:
                     - /var/go/.m2/repository
-
-
   mag-api-model-artifact-release:
-        group: LGI-MAG-RELEASE
-        locking: on
-        label_template: "${upstream[:8]}-${COUNT}"
-        tracking_tool:
-          link: "https://orionjira.atlassian.net/browse/${ID}"
-          regex: "MAG--(\\d+)"
-        materials:
-          upstream:
-            git: git@gitlab.piksel.com:liberty/mag-api-model.git
-            destination: app
-            blacklist:
-              - pipeline.gocd.yaml
-            shallow_clone: true
-        stages:
-        - release:
-            approval:
-              type: manual
-              roles:
+    group: LGI-MAG-RELEASE
+    locking: on
+    label_template: "${upstream[:8]}-${COUNT}"
+    tracking_tool:
+      link: "https://orionjira.atlassian.net/browse/${ID}"
+      regex: "MAG--(\\d+)"
+    materials:
+      upstream:
+        git: git@gitlab.piksel.com:liberty/mag-api-model.git
+        destination: app
+        blacklist:
+          - pipeline.gocd.yaml
+          - Makefile
+        shallow_clone: true
+    stages:
+      - release:
+          approval:
+            type: manual
+            roles:
               - metadata
-            jobs:
-              mvn_prepare_perform:
-                elastic_profile_id: small
-                tasks:
-                  - exec:
-                     working_directory: app
-                     command: make
-                     arguments:
-                        - update-parent-versions
-                  - exec:
-                      working_directory: app
-                      command: mvn
-                      arguments:
-                             - -B
-                             - release:prepare
-                             - release:perform
+          jobs:
+            mvn_prepare_perform:
+              elastic_profile_id: small
+              tasks:
+                - exec:
+                   working_directory: app
+                   command: make
+                   arguments:
+                     - "update-parent-versions"
+                - exec:
+                   working_directory: app
+                   command: make
+                   arguments:
+                     - "release"
