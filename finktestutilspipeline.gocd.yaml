@@ -72,6 +72,7 @@ pipelines:
         destination: app
         blacklist:
           - pipeline.gocd.yaml
+          - Makefile
         shallow_clone: true
     stages:
       - release:
@@ -87,11 +88,9 @@ pipelines:
                    working_directory: app
                    command: make
                    arguments:
-                     - update-parent-versions
+                     - "update-parent-versions"
                 - exec:
-                    working_directory: app
-                    command: mvn
-                    arguments:
-                      - -B
-                      - release:prepare
-                      - release:perform
+                   working_directory: app
+                   command: make
+                   arguments:
+                     - "release"
