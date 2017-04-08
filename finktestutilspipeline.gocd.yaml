@@ -58,7 +58,6 @@ pipelines:
                     command: cache
                     arguments:
                      - /var/go/.m2/repository
-
   mag-flink-test-utils-artifact-release:
     group: LGI-MAG-RELEASE
     locking: on
