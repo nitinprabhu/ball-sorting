@@ -26,7 +26,6 @@ pipelines:
           clean_workspace: true
           jobs:
             mvn_build:
-              elastic_profile_id: small
               tasks:
                - exec:
                    working_directory: app
@@ -78,7 +77,6 @@ pipelines:
               - metadata
           jobs:
             mvn_prepare_perform:
-              elastic_profile_id: small
               tasks:
                 - exec:
                    working_directory: app
