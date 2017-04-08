@@ -1,0 +1,100 @@
+pipelines:
+  mag-maple-sequoia-sink-artifact-build:
+    group: LGI-MAG-MAPLE
+    locking: on
+    label_template: "${upstream[:8]}-${COUNT}"
+    tracking_tool:
+      link: "https://orionjira.atlassian.net/browse/${ID}"
+      regex: "MAG--(\\d+)"
+    environment_variables:
+      cucumberenv: test
+    materials:
+      upstream:
+        git: git@gitlab.piksel.com:liberty/mag-maple-sequoia-sink.git
+        destination: app
+        blacklist:
+          - pipeline.gocd.yaml
+        shallow_clone: true
+      parent:
+        pipeline: mag-parent-pom-artifact-build
+        stage: deploy
+      test-utils:
+        pipeline: mag-test-utils-artifact-build
+        stage: deploy
+      flink-commons:
+        pipeline: mag-flink-commons-artifact-build
+        stage: deploy
+    stages:
+       - build:
+           clean_workspace: true
+           jobs:
+             mvn_build:
+               elastic_profile_id: small
+               tasks:
+                - exec:
+                    working_directory: app
+                    command: decache
+                    arguments:
+                     - /var/go/.m2/repository
+                - exec:
+                    working_directory: app
+                    command: mvn
+                    arguments:
+                     - clean
+                     - package
+       - deploy:
+           clean_workspace: false
+           jobs:
+             mvn_build:
+               elastic_profile_id: small
+               tasks:
+                - exec:
+                    working_directory: app
+                    command: mvn
+                    arguments:
+                     - deploy
+                - exec:
+                    working_directory: app
+                    command: cache
+                    arguments:
+                     - /var/go/.m2/repository
+
+mag-maple-sequoia-sink-artifact-release:
+      group: LGI-MAG-RELEASE
+      locking: on
+      label_template: "${upstream[:8]}-${COUNT}"
+      tracking_tool:
+        link: "https://orionjira.atlassian.net/browse/${ID}"
+        regex: "MAG--(\\d+)"
+      materials:
+        upstream:
+          git: git@gitlab.piksel.com:liberty/mag-maple-sequoia-sink.git
+          destination: app
+          blacklist:
+            - pipeline.gocd.yaml
+          shallow_clone: true
+        int-tests:
+          pipeline: mag-flink-integration-tests-artifact-build
+          stage: run_tests_ci
+      stages:
+      - release:
+          approval:
+            type: manual
+            roles:
+            - metadata
+          jobs:
+            mvn_prepare_perform:
+              elastic_profile_id: small
+              tasks:
+                - exec:
+                   working_directory: app
+                   command: make
+                   arguments:
+                      - update-parent-versions
+                - exec:
+                    working_directory: app
+                    command: mvn
+                    arguments:
+                           - -B
+                           - release:prepare
+                           - release:perform
