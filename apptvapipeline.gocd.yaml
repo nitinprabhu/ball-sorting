@@ -93,7 +93,6 @@ pipelines:
           clean_workspace: true
           jobs:
             upload_artifact:
-              elastic_profile_id: small
               tasks:
                - exec:
                    working_directory: app
@@ -135,7 +134,6 @@ pipelines:
           clean_workspace: true
           jobs:
             build_container:
-              elastic_profile_id: small
               tasks:
                - exec:
                    working_directory: app
