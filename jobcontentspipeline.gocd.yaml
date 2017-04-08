@@ -61,30 +61,27 @@ pipelines:
                     command: cache
                     arguments:
                      - /var/go/.m2/repository
-
-mag-maple-job-contents-artifact-release:
-      group: LGI-MAG-RELEASE
-      locking: on
-      label_template: "${upstream[:8]}-${COUNT}"
-      tracking_tool:
-        link: "https://orionjira.atlassian.net/browse/${ID}"
-        regex: "MAG--(\\d+)"
-      materials:
-        upstream:
-          git: git@gitlab.piksel.com:liberty/mag-maple-job-contents.git
-          destination: app
-          blacklist:
-            - pipeline.gocd.yaml
-          shallow_clone: true
-        int-tests:
-          pipeline: mag-flink-integration-tests-artifact-build
-          stage: run_tests_ci
-      stages:
+  mag-maple-job-contents-artifact-release:
+    group: LGI-MAG-RELEASE
+    locking: on
+    label_template: "${upstream[:8]}-${COUNT}"
+    tracking_tool:
+      link: "https://orionjira.atlassian.net/browse/${ID}"
+      regex: "MAG--(\\d+)"
+    materials:
+      upstream:
+        git: git@gitlab.piksel.com:liberty/mag-maple-job-contents.git
+        destination: app
+        blacklist:
+          - pipeline.gocd.yaml
+          - Makefile
+        shallow_clone: true
+    stages:
       - release:
           approval:
             type: manual
             roles:
-            - metadata
+              - metadata
           jobs:
             mvn_prepare_perform:
               elastic_profile_id: small
@@ -93,11 +90,9 @@ mag-maple-job-contents-artifact-release:
                    working_directory: app
                    command: make
                    arguments:
-                      - update-parent-versions
+                     - "update-parent-versions"
                 - exec:
-                    working_directory: app
-                    command: mvn
-                    arguments:
-                           - -B
-                           - release:prepare
-                           - release:perform
+                   working_directory: app
+                   command: make
+                   arguments:
+                     - "release"
